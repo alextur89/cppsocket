@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(cppsocket)
+include_directories(include example source)
+set(UDPSOURCE source/udpsocket.cpp example/udp.cpp)
+add_executable(udp_example ${UDPSOURCE})
