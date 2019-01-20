@@ -19,6 +19,11 @@ UdpSocket::UdpSocket(){
     _socket = -1;
 }
 
+UdpSocket::UdpSocket(const UdpSocket& the){
+    _socket = the._socket;
+    _addr = the._addr;
+}
+
 UdpSocket::~UdpSocket(){
     close();
 }
@@ -78,19 +83,19 @@ void UdpSocket::flush(){
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
 };
 
-void UdpClient::append(const UdpSocket& sock){
+void UdpClient::append(std::shared_ptr<UdpSocket> sock){
     _sockets.push_back(sock);
 }
 
-std::vector<UdpSocket> UdpClient::ready(long microsec){
-    std::vector<UdpSocket> result;
+std::vector<std::shared_ptr<UdpSocket> > UdpClient::ready(long microsec){
+    std::vector<std::shared_ptr<UdpSocket> > result;
     if (_sockets.empty()){
         throw ExcEmptySocketContainer();
     }
-    int max = std::max_element(std::begin(_sockets), std::end(_sockets), 
-            [](const UdpSocket& sk1, const UdpSocket& sk2){
-            return (sk1.getsocket() > sk2.getsocket());
-            })->getsocket();
+    int max = (*std::max_element(std::begin(_sockets), std::end(_sockets), 
+            [](std::shared_ptr<UdpSocket> sk1, std::shared_ptr<UdpSocket> sk2){
+            return (sk1->getsocket() > sk2->getsocket());
+            }))->getsocket();
 
     if (max < 0){
         throw ExcOpenSocket();
@@ -98,7 +103,7 @@ std::vector<UdpSocket> UdpClient::ready(long microsec){
 
     fd_set set;
     for (auto s: _sockets){
-        FD_SET(s.getsocket(), &set);
+        FD_SET(s->getsocket(), &set);
     }
     std::shared_ptr<struct timeval> t;
     if (microsec >= 0){
@@ -109,7 +114,7 @@ std::vector<UdpSocket> UdpClient::ready(long microsec){
     }
     if (select(max + 1, &set, NULL, NULL, t.get()) > 0){
         for (auto s: _sockets){
-            if (FD_ISSET(s.getsocket(), &set)){
+            if (FD_ISSET(s->getsocket(), &set)){
                 result.push_back(s);
             }
         }
