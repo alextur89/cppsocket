@@ -87,6 +87,12 @@ void UdpClient::append(std::shared_ptr<UdpSocket> sock){
     _sockets.push_back(sock);
 }
 
+void UdpClient::append(std::initializer_list<std::shared_ptr<UdpSocket> > list){
+    for (auto e: list){
+        _sockets.push_back(e);
+    }
+}
+
 std::vector<std::shared_ptr<UdpSocket> > UdpClient::ready(long microsec){
     std::vector<std::shared_ptr<UdpSocket> > result;
     if (_sockets.empty()){

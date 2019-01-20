@@ -26,6 +26,7 @@ namespace udp{
         public:
             UdpClient() = default;
             void append(std::shared_ptr<UdpSocket> sock);
+            void append(std::initializer_list<std::shared_ptr<UdpSocket> > list);
             std::vector<std::shared_ptr<UdpSocket> > ready(long microsec);
     };
 }
