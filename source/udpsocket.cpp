@@ -19,6 +19,14 @@ UdpSocket::UdpSocket(){
     _socket = -1;
 }
 
+UdpSocket::~UdpSocket(){
+    close();
+}
+
+socket_t UdpSocket::getsocket() const{
+    return _socket;
+}
+
 bool UdpSocket::open(const std::string addr, unsigned port, const SockOpt opt){
     const int opt_val = 1;
     if (addr.empty()){

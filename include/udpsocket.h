@@ -15,9 +15,8 @@ namespace udp{
             unsigned send(const char* src, size_t size)override;
             bool close()override;
             void flush()override;
-            socket_t getsocket() const{
-                return _socket;
-            }
+            socket_t getsocket() const;
+            ~UdpSocket();
     };
     class UdpClient{
         private:

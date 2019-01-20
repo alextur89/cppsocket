@@ -16,9 +16,11 @@ protected:
 };
 
 TEST_F(TestUdpSocket, OpenListenSocket) {
+    ASSERT_EQ(socket->open("127.0.0.1", 12345, cppsocket::Reuseaddr | cppsocket::Bind), true);
 }
 
 TEST_F(TestUdpSocket, OpenSendSocket) {
+    ASSERT_EQ(socket->open("127.0.0.1", 12345, cppsocket::Reuseaddr), true);
 }
 
 int main(int argc, char** argv) {
