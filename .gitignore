@@ -1,0 +1,6 @@
+CMakeFiles/
+Testing/
+TestUdpSocket
+*.cmake
+Makefile
+CMakeCache.txt
