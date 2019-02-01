@@ -22,12 +22,16 @@ namespace udp{
     };
     class UdpClient{
         private:
-            std::list<std::shared_ptr<UdpSocket> > _sockets;
+            std::list<UdpSocket> _sockets;
         public:
+            enum class Wait: long{
+                infinity = -1,
+                immediately = 0
+            };
             UdpClient() = default;
-            void append(std::shared_ptr<UdpSocket> sock);
-            void append(std::initializer_list<std::shared_ptr<UdpSocket> > list);
-            void ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec = -1);
+            void append(const UdpSocket& sock);
+            void append(std::initializer_list<UdpSocket> list);
+            void ready(std::list<UdpSocket>& result, long microsec = static_cast<long>(Wait::infinity));
     };
 }
 }
