@@ -1,7 +1,7 @@
 #pragma once
 
 #include "abstractsocket.h"
-#include <vector>
+#include <list>
 #include <memory>
 
 namespace cppsocket{
@@ -22,12 +22,12 @@ namespace udp{
     };
     class UdpClient{
         private:
-            std::vector<std::shared_ptr<UdpSocket> > _sockets;
+            std::list<std::shared_ptr<UdpSocket> > _sockets;
         public:
             UdpClient() = default;
             void append(std::shared_ptr<UdpSocket> sock);
             void append(std::initializer_list<std::shared_ptr<UdpSocket> > list);
-            std::vector<std::shared_ptr<UdpSocket> > ready(long microsec);
+            void ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec = -1);
     };
 }
 }

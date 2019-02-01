@@ -48,7 +48,8 @@ TEST_F(TestUdpSocket, ClientExchange) {
     ASSERT_EQ(send_socket->send(data, 8) > 0, true);
     char buf[] = {0,0,0,0,0,0,0,0};
 
-    std::vector<std::shared_ptr<cppsocket::udp::UdpSocket> > vs = client->ready(0);
+    std::list<std::shared_ptr<cppsocket::udp::UdpSocket> > vs;
+    client->ready(vs, 0);
     ASSERT_EQ(vs.empty(), false);
     std::shared_ptr<cppsocket::udp::UdpSocket> sock = vs.front();
     ASSERT_EQ(sock->read(buf, 8) > 0, true);

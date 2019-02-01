@@ -93,8 +93,7 @@ void UdpClient::append(std::initializer_list<std::shared_ptr<UdpSocket> > list){
     }
 }
 
-std::vector<std::shared_ptr<UdpSocket> > UdpClient::ready(long microsec){
-    std::vector<std::shared_ptr<UdpSocket> > result;
+void UdpClient::ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec){
     if (_sockets.empty()){
         throw ExcEmptySocketContainer();
     }
@@ -125,7 +124,6 @@ std::vector<std::shared_ptr<UdpSocket> > UdpClient::ready(long microsec){
             }
         }
     }
-    return result;
 }
 
 }
