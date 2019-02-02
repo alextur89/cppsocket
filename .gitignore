@@ -4,3 +4,4 @@ TestUdpSocket
 *.cmake
 Makefile
 CMakeCache.txt
+doc/
