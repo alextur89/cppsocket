@@ -31,7 +31,7 @@ namespace udp{
             *    \param[in] addr Host address
             *    \param[in] port Port
             */
-            bool open(const sockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer

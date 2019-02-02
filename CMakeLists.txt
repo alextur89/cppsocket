@@ -12,3 +12,8 @@ target_link_libraries(TestUdpSocket ${GTEST_LIBRARIES})
 
 enable_testing()
 add_test(TestUdpSocket "./TestUdpSocket")
+
+add_custom_target(
+  doc ALL
+  doxygen COMMAND
+)
