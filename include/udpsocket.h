@@ -12,9 +12,10 @@ namespace udp{
         public:
             UdpSocket();
             UdpSocket(const UdpSocket&);
-            bool open(const std::string addr, unsigned port, const SockOpt = EmptyFlag)override;
+            bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
             unsigned read(char* dest, size_t size)override;
             unsigned send(const char* src, size_t size)override;
+            unsigned send(const char* src, size_t size, std::string addr, unsigned port)override;
             bool close()override;
             void flush()override;
             socket_t getsocket() const;

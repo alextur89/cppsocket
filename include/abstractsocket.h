@@ -19,7 +19,8 @@ namespace cppsocket{
         protected:
             virtual unsigned read(char* dest, size_t size) = 0;
             virtual unsigned send(const char* src, size_t size) = 0;
-            virtual bool open(const std::string addr, unsigned port, const SockOpt = 0) = 0;
+            virtual unsigned send(const char* src, size_t size, std::string addr, unsigned port) = 0;
+            virtual bool open(const SockOpt opt, const std::string addr, unsigned port) = 0;
             virtual bool close() = 0;
             virtual void flush() = 0;   
     };

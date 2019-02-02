@@ -32,7 +32,7 @@ socket_t UdpSocket::getsocket() const{
     return _socket;
 }
 
-bool UdpSocket::open(const std::string addr, unsigned port, const SockOpt opt){
+bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
     const int opt_val = 1;
     if (addr.empty()){
         return false;
@@ -68,6 +68,14 @@ bool UdpSocket::open(const std::string addr, unsigned port, const SockOpt opt){
 
 unsigned UdpSocket::read(char* dest, size_t size){
     return recv(_socket, dest, size, 0);
+};
+
+unsigned UdpSocket::send(const char* src, size_t size, std::string addr, unsigned port){
+    std::unique_ptr<addr_t> the_addr(new addr_t);
+    the_addr->sin_family = AF_INET;
+    the_addr->sin_addr.s_addr = inet_addr(addr.c_str());
+    the_addr->sin_port = htons(port);
+    return sendto(_socket, src, size, 0, (struct sockaddr*) the_addr.get(), sizeof(addr_t));
 };
 
 unsigned UdpSocket::send(const char* src, size_t size){
