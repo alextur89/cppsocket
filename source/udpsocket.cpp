@@ -25,7 +25,6 @@ UdpSocket::UdpSocket(const UdpSocket& the){
 }
 
 UdpSocket::~UdpSocket(){
-    close();
 }
 
 socket_t UdpSocket::getsocket() const{
