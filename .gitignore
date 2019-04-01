@@ -5,3 +5,7 @@ TestUdpSocket
 Makefile
 CMakeCache.txt
 doc/
+googletest-build/
+googletest-download/
+googletest-src/
+lib/
