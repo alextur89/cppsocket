@@ -25,6 +25,7 @@ namespace udp{
         public:
             UdpSocket();
             UdpSocket(const UdpSocket&);
+            UdpSocket(UdpSocket&&) = delete;
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
