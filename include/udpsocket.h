@@ -80,7 +80,7 @@ namespace udp{
     */
     class UdpClient{
         private:
-            std::list<UdpSocket> _sockets;
+            std::list<std::shared_ptr<UdpSocket> > _sockets;
         public:
             ///Options for waiting data
             enum class Wait: long{
@@ -94,16 +94,11 @@ namespace udp{
             */
             void append(const UdpSocket& sock);
             /*!
-            *    Append socket to set for sync. 
-            *    \param[in] list List of sockets
-            */
-            void append(std::initializer_list<UdpSocket> list);
-            /*!
             *    Wait for input data
             *    \param[out] result List of ready for input sockets
             *    \param[in] microsec Pause for waiting sync.
             */
-            void ready(std::list<UdpSocket>& result, long microsec = static_cast<long>(Wait::infinity));
+            void ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec = static_cast<long>(Wait::infinity));
     };
 }
 }
