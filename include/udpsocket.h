@@ -72,7 +72,7 @@ namespace udp{
             ~UdpSocket();
     };
     /*!
-    *     \class UdpClient
+    *     \class UdpSelect
     *     \brief The UdpSelect class which implement synchronous input multiplexing
     *     \author Tyuryuchkin A.
     *     \version 0.1.0
