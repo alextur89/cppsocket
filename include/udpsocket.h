@@ -73,12 +73,12 @@ namespace udp{
     };
     /*!
     *     \class UdpClient
-    *     \brief The UdpClient class which implement synchronous input multiplexing
+    *     \brief The UdpSelect class which implement synchronous input multiplexing
     *     \author Tyuryuchkin A.
     *     \version 0.0.1
     *     \date Febrary 2019 года
     */
-    class UdpClient{
+    class UdpSelect{
         private:
             std::list<std::shared_ptr<UdpSocket> > _sockets;
         public:
@@ -87,7 +87,7 @@ namespace udp{
                 infinity = -1,///<infinity
                 immediately = 0///<immediately
             };
-            UdpClient() = default;
+            UdpSelect() = default;
             /*!
             *    Append socket to set for sync. 
             *    \param[in] sock Socket

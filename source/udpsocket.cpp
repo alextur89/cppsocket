@@ -93,11 +93,11 @@ void UdpSocket::flush(){
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
 };
 
-void UdpClient::append(const UdpSocket& sock){
+void UdpSelect::append(const UdpSocket& sock){
     _sockets.push_back(std::make_shared<UdpSocket>(sock));
 }
 
-void UdpClient::ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec){
+void UdpSelect::ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec){
     if (_sockets.empty()){
         throw ExcEmptySocketContainer();
     }
