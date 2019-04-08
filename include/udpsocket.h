@@ -95,7 +95,7 @@ namespace udp{
             void append(const UdpSocket& sock);
             /*!
             *    Wait for input data
-            *    \param[out] result List of ready for input sockets
+            *    \param[out] result Pointers list of ready for input sockets
             *    \param[in] microsec Pause for waiting sync.
             */
             void ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec = static_cast<long>(Wait::infinity));
