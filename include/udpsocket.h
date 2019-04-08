@@ -16,7 +16,7 @@ namespace udp{
     *    \class UdpSocket
     *    \brief The UdpSocket class which implement interface of AbstractSocket
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
+    *    \version 0.1.0
     *    \date Febrary 2019 года
     */
     class UdpSocket: public AbstractSocket{
@@ -25,6 +25,7 @@ namespace udp{
         public:
             UdpSocket();
             UdpSocket(const UdpSocket&);
+            UdpSocket(UdpSocket&&) = delete;
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
@@ -71,38 +72,33 @@ namespace udp{
             ~UdpSocket();
     };
     /*!
-    *     \class UdpClient
-    *     \brief The UdpClient class which implement synchronous input multiplexing
+    *     \class UdpSelect
+    *     \brief The UdpSelect class which implement synchronous input multiplexing
     *     \author Tyuryuchkin A.
-    *     \version 0.0.1
+    *     \version 0.1.0
     *     \date Febrary 2019 года
     */
-    class UdpClient{
+    class UdpSelect{
         private:
-            std::list<UdpSocket> _sockets;
+            std::list<std::shared_ptr<UdpSocket> > _sockets;
         public:
             ///Options for waiting data
             enum class Wait: long{
                 infinity = -1,///<infinity
                 immediately = 0///<immediately
             };
-            UdpClient() = default;
+            UdpSelect() = default;
             /*!
             *    Append socket to set for sync. 
             *    \param[in] sock Socket
             */
             void append(const UdpSocket& sock);
             /*!
-            *    Append socket to set for sync. 
-            *    \param[in] list List of sockets
-            */
-            void append(std::initializer_list<UdpSocket> list);
-            /*!
             *    Wait for input data
             *    \param[out] result List of ready for input sockets
             *    \param[in] microsec Pause for waiting sync.
             */
-            void ready(std::list<UdpSocket>& result, long microsec = static_cast<long>(Wait::infinity));
+            void ready(std::list<std::shared_ptr<UdpSocket> >& result, long microsec = static_cast<long>(Wait::infinity));
     };
 }
 }

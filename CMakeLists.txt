@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-project(cppsocket)
+#project(cppsocket)
+ADD_LIBRARY(cppsocket STATIC source/udpsocket.cpp)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -41,7 +42,7 @@ set(UDPTESTSOURCE source/udpsocket.cpp tests/testudp.cpp)
 
 add_executable(TestUdpSocket ${UDPTESTSOURCE})
 
-target_link_libraries(TestUdpSocket gtest_main)
+target_link_libraries(TestUdpSocket gtest_main cppsocket)
 
 enable_testing()
 add_test(TestUdpSocket "./TestUdpSocket")
@@ -50,3 +51,5 @@ add_custom_target(
   doc ALL
   doxygen COMMAND
 )
+
+

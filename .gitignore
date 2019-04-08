@@ -9,3 +9,5 @@ googletest-build/
 googletest-download/
 googletest-src/
 lib/
+.DS_Store
+libcppsocket.a
