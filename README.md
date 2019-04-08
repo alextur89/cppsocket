@@ -7,6 +7,7 @@ Platform
 ==========
 
 * Linux
+* Mac Os
 
 ### Content:
     tests/ - unit tests via google test;
@@ -21,7 +22,5 @@ Build
 
 cmake .
 make
-
-
-
+make test (for testing)
 
