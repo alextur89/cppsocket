@@ -21,6 +21,7 @@ namespace tcp{
     *    \date April 2019 года
     */
     class TcpSocket: public AbstractSocket{
+            friend class TcpServer;
             socket_t _socket;        
             addr_t _addr;        
             addr_t _server_addr;        
@@ -75,8 +76,8 @@ namespace tcp{
     class TcpServer{
             TcpSocket parentSocket;
         public:
-            TcpServer() = delete;
             TcpServer(const std::string hostAddr, unsigned hostPort);
+            TcpServer() = delete;
             TcpServer(const TcpSocket&) = delete;
             TcpServer(TcpSocket&&) = delete;
             /*!
@@ -88,7 +89,7 @@ namespace tcp{
             *    Wait for a connection request
             *    param[in] handler A function for handle
             */
-            bool accept(std::function<int(socket_t childSock, addr_t clientAddr)> handler);
+            bool accept(std::function<int(TcpSocket)> handler, int& result);
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer

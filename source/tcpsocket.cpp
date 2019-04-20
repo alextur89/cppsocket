@@ -112,14 +112,31 @@ TcpServer::TcpServer(const std::string hostAddr, unsigned hostPort){
 }
 
 bool TcpServer::listen(unsigned countOfConn){
+    if (::listen(parentSocket.getsocket(), countOfConn) < 0){
+        return false;
+    }
     return true;
 }
 
-bool TcpServer::accept(std::function<int(socket_t childSock, addr_t clientAddr)> handler){
+bool TcpServer::accept(std::function<int(TcpSocket)> handler, int& result){
+    int addrlen = sizeof(addr_t);
+    addr_t clientAddr;
+    auto newSock = ::accept(parentSocket.getsocket(), (struct sockaddr*) &clientAddr, (socklen_t*) &addrlen);
+    if (newSock < 0){
+        return false;
+    }
+    TcpSocket clientSocket;
+    clientSocket._socket = newSock;
+    clientSocket._addr = clientAddr;
+    clientSocket._server_addr = parentSocket._addr;
+    clientSocket._is_connected = true;
+    result = handler(clientSocket);
+    ::close(newSock);
     return true;
 }
 
 bool TcpServer::close(){
+    parentSocket.close();
     return true;
 }
 
