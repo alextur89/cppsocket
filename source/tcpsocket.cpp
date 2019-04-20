@@ -2,6 +2,7 @@
 
 #include <netdb.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <sys/un.h>
@@ -62,6 +63,11 @@ bool TcpClient::open(const SockOpt opt, const std::string addr, unsigned port){
     if (opt & SockFlags::Nonblock){
         int flags = fcntl(_socket, F_GETFL, 0);
         fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
+    }
+    if (opt & SockFlags::NoDelay){
+        if (setsockopt(_socket, SOL_SOCKET, TCP_NODELAY, &opt_val, sizeof(opt_val)) != 0){
+            throw ExcSetSockOpt();
+        }
     }
     return true;
 }
