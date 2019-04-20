@@ -16,29 +16,29 @@
 namespace cppsocket{
 namespace tcp{
 
-TcpClient::TcpClient(){
+TcpSocket::TcpSocket(){
     _socket = -1;
     _is_connected = false;
 }
 
-TcpClient::TcpClient(const TcpClient& the){
+TcpSocket::TcpSocket(const TcpSocket& the){
     _socket = the._socket;
     _addr = the._addr;
     _server_addr = the._server_addr;
     _is_connected = the._is_connected;
 }
 
-TcpClient::~TcpClient(){
+TcpSocket::~TcpSocket(){
     if (_socket != -1){
         close();
     }
 }
 
-socket_t TcpClient::getsocket() const{
+socket_t TcpSocket::getsocket() const{
     return _socket;
 }
 
-bool TcpClient::open(const SockOpt opt, const std::string addr, unsigned port){
+bool TcpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
     const int opt_val = 1;
     if (addr.empty()){
         return false;
@@ -72,30 +72,30 @@ bool TcpClient::open(const SockOpt opt, const std::string addr, unsigned port){
     return true;
 }
 
-unsigned TcpClient::read(char* dest, size_t size){
+unsigned TcpSocket::read(char* dest, size_t size){
     if (!_is_connected){
         throw ExcNotConnected();
     }
     return ::read(_socket, dest, size);
 };
 
-unsigned TcpClient::send(const char* src, size_t size){
+unsigned TcpSocket::send(const char* src, size_t size){
     if (!_is_connected){
         throw ExcNotConnected();
     }
     return ::write(_socket, src, size);
 };
 
-bool TcpClient::close(){
+bool TcpSocket::close(){
     return ( (::close(_socket) == 0)? true: false);
 };
 
-void TcpClient::flush(){
+void TcpSocket::flush(){
     static char garbage_sock[512];
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
 };
 
-bool TcpClient::connect(const std::string addr, unsigned port){
+bool TcpSocket::connect(const std::string addr, unsigned port){
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_addr.s_addr = inet_addr(addr.c_str());
     _server_addr.sin_port = htons(port);
@@ -104,6 +104,28 @@ bool TcpClient::connect(const std::string addr, unsigned port){
     }
     return _is_connected;
 };
+
+TcpServer::TcpServer(const std::string hostAddr, unsigned hostPort){
+    if (!parentSocket.open(Bind | Reuseaddr, hostAddr,  hostPort)){
+        throw ExcOpenSocket();
+    }
+}
+
+bool TcpServer::listen(unsigned countOfConn){
+    return true;
+}
+
+bool TcpServer::accept(std::function<int(socket_t childSock, addr_t clientAddr)> handler){
+    return true;
+}
+
+bool TcpServer::close(){
+    return true;
+}
+
+TcpServer::~TcpServer(){
+
+}
 
 }
 }

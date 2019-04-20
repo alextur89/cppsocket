@@ -8,27 +8,28 @@
 
 #include "abstractsocket.h"
 #include <list>
+#include <functional>
 #include <memory>
 
 namespace cppsocket{
 namespace tcp{
     /*!
-    *    \class TcpClient
+    *    \class TcpSocket
     *    \brief The TcpSocket class which implement tcp client
     *    \author Tyuryuchkin A.
     *    \version 0.0.1
     *    \date April 2019 года
     */
-    class TcpClient: public AbstractSocket{
+    class TcpSocket: public AbstractSocket{
             socket_t _socket;        
             addr_t _addr;        
             addr_t _server_addr;        
             bool _is_connected;
             unsigned send(const char* src, size_t size, std::string addr, unsigned port){ return 0;}
         public:
-            TcpClient();
-            TcpClient(const TcpClient&);
-            TcpClient(TcpClient&&) = delete;
+            TcpSocket();
+            TcpSocket(const TcpSocket&);
+            TcpSocket(TcpSocket&&) = delete;
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
@@ -69,7 +70,36 @@ namespace tcp{
             *    Function shall return sockets descriptor 
             */
             socket_t getsocket() const;
-            ~TcpClient();
+            ~TcpSocket();
+    };
+    class TcpServer{
+            TcpSocket parentSocket;
+        public:
+            TcpServer() = delete;
+            TcpServer(const std::string hostAddr, unsigned hostPort);
+            TcpServer(const TcpSocket&) = delete;
+            TcpServer(TcpSocket&&) = delete;
+            /*!
+            *    Make this socket ready to accept connection requests
+            *    \param[in] countOfConn Count of requests to queue up
+            */
+            bool listen(unsigned countOfConn = 5);
+            /*!
+            *    Wait for a connection request
+            *    param[in] handler A function for handle
+            */
+            bool accept(std::function<int(socket_t childSock, addr_t clientAddr)> handler);
+            /*!
+            *    Read from socket
+            *    \param[out] dest Pointer to destination buffer
+            *    \param[in] size Function shall attempt read size bytes from socket
+            *    \return Upon successful completion the function shall return number of bytes read
+            */
+            bool close();
+            /*!
+            *    Flush buffered socket data
+            */
+            ~TcpServer();
     };
 }
 }
