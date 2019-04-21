@@ -19,7 +19,8 @@ namespace cppsocket{
         Reuseaddr = 0x1,///<equivalent to the SO_REUSEADDR socket option
         Nonblock = 0x2,///<not blocking io
         Broadcast = 0x4,///<broadcast io
-        Bind = 0x8///<to bind interface (must be for recv socket)
+        Bind = 0x8,///<to bind interface (must be for recv socket)
+        NoDelay = 0x10///<to disable Nagle algorithm
     };
     /*!
     *    \class AbstractSocket

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 #project(cppsocket)
-ADD_LIBRARY(cppsocket STATIC source/udpsocket.cpp)
+ADD_LIBRARY(cppsocket STATIC source/udpsocket.cpp source/tcpsocket.cpp)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)

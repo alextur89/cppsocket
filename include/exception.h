@@ -17,7 +17,7 @@ namespace cppsocket{
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class UdpSocketException: public std::exception{
+    class SocketException: public std::exception{
         protected:
             std::string msg;///<Exception's message
         public:
@@ -32,7 +32,7 @@ namespace cppsocket{
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcSetSockOpt: public UdpSocketException{
+    class ExcSetSockOpt: public SocketException{
         public:
             ExcSetSockOpt(){
                 msg = "Option not set";
@@ -45,7 +45,7 @@ namespace cppsocket{
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcBind: public UdpSocketException{
+    class ExcBind: public SocketException{
         public:
             ExcBind(){
                 msg = "Bind has failed";
@@ -58,7 +58,7 @@ namespace cppsocket{
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcEmptySocketContainer: public UdpSocketException{
+    class ExcEmptySocketContainer: public SocketException{
         public:
             ExcEmptySocketContainer(){
                 msg = "Sockets container is empty";
@@ -71,10 +71,23 @@ namespace cppsocket{
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcOpenSocket: public UdpSocketException{
+    class ExcOpenSocket: public SocketException{
         public:
             ExcOpenSocket(){
                 msg = "Socket not open";
+            }
+    };
+    /*!
+    *    \class ExcNotConnected
+    *    \brief Exception throw when the programm attempt to transfer data, but the socket not connected 
+    *    \author Tyuryuchkin A.
+    *    \version 0.0.1
+    *    \date April 2019 года
+    */
+    class ExcNotConnected: public SocketException{
+        public:
+            ExcNotConnected(){
+                msg = "Not connected";
             }
     };
 }
