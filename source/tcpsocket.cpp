@@ -144,7 +144,7 @@ bool TcpServer::close(){
 }
 
 TcpServer::~TcpServer(){
-
+    close();
 }
 
 }
