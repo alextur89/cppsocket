@@ -15,9 +15,9 @@ namespace cppsocket{
 namespace tcp{
     /*!
     *    \class TcpSocket
-    *    \brief The TcpSocket class which implement tcp client
+    *    \brief The TcpSocket class which implement a tcp client
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
+    *    \version 0.2.0
     *    \date April 2019 года
     */
     class TcpSocket: public AbstractSocket{
@@ -36,12 +36,14 @@ namespace tcp{
             *    \param[in] sockOpt Options
             *    \param[in] addr Host address
             *    \param[in] port Port
+            *    \return true if successfull, false otherwise  
             */
             bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
             /*!
             *    Connect to host 
             *    \param[in] addr Host address
             *    \param[in] port Port
+            *    \return true if successfull, false otherwise  
             */
             bool connect(const std::string addr = "127.0.0.1", unsigned port = 0);
             /*!
@@ -60,7 +62,7 @@ namespace tcp{
             unsigned send(const char* src, size_t size)override;
             /*!
             *    Close socket
-            *    \return Upon successful completion the function shall return true else false
+            *    \return true if successfull, false otherwise  
             */
             bool close()override;
             /*!
@@ -73,6 +75,13 @@ namespace tcp{
             socket_t getsocket() const;
             ~TcpSocket();
     };
+    /*!
+    *    \class TcpServer
+    *    \brief The TcpServer class which implement a tcp server
+    *    \author Tyuryuchkin A.
+    *    \version 0.2.0
+    *    \date April 2019 года
+    */
     class TcpServer{
             TcpSocket parentSocket;
         public:
@@ -83,23 +92,21 @@ namespace tcp{
             /*!
             *    Make this socket ready to accept connection requests
             *    \param[in] countOfConn Count of requests to queue up
+            *    \return true if successfull, false otherwise  
             */
             bool listen(unsigned countOfConn = 5);
             /*!
             *    Wait for a connection request
             *    param[in] handler A function for handle
+            *    param[in] result A result of handle function
+            *    \return true if successfull, false otherwise  
             */
             bool accept(std::function<int(TcpSocket&)> handler, int& result);
             /*!
-            *    Read from socket
-            *    \param[out] dest Pointer to destination buffer
-            *    \param[in] size Function shall attempt read size bytes from socket
-            *    \return Upon successful completion the function shall return number of bytes read
+            *    Close server
+            *    \return true if successfull, false otherwise  
             */
             bool close();
-            /*!
-            *    Flush buffered socket data
-            */
             ~TcpServer();
     };
 }
