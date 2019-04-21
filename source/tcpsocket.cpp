@@ -100,6 +100,9 @@ bool TcpSocket::connect(const std::string addr, unsigned port){
     _server_addr.sin_addr.s_addr = inet_addr(addr.c_str());
     _server_addr.sin_port = htons(port);
     if (::connect(_socket, (struct sockaddr*) &_server_addr, sizeof(_server_addr)) != 0){
+        _is_connected = false;
+    }
+    else{
         _is_connected = true;
     }
     return _is_connected;
@@ -118,7 +121,7 @@ bool TcpServer::listen(unsigned countOfConn){
     return true;
 }
 
-bool TcpServer::accept(std::function<int(TcpSocket)> handler, int& result){
+bool TcpServer::accept(std::function<int(TcpSocket&)> handler, int& result){
     int addrlen = sizeof(addr_t);
     addr_t clientAddr;
     auto newSock = ::accept(parentSocket.getsocket(), (struct sockaddr*) &clientAddr, (socklen_t*) &addrlen);

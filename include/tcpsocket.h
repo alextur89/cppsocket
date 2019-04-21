@@ -89,7 +89,7 @@ namespace tcp{
             *    Wait for a connection request
             *    param[in] handler A function for handle
             */
-            bool accept(std::function<int(TcpSocket)> handler, int& result);
+            bool accept(std::function<int(TcpSocket&)> handler, int& result);
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer
