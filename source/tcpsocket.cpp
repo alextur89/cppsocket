@@ -128,11 +128,7 @@ bool TcpServer::accept(std::function<int(TcpSocket&)> handler, int& result){
     if (newSock < 0){
         return false;
     }
-    TcpSocket clientSocket;
-    clientSocket._socket = newSock;
-    clientSocket._addr = clientAddr;
-    clientSocket._server_addr = parentSocket._addr;
-    clientSocket._is_connected = true;
+    TcpSocket clientSocket{newSock, clientAddr, parentSocket._addr, true};
     result = handler(clientSocket);
     return true;
 }
