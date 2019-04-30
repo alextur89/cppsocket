@@ -19,8 +19,8 @@ Platform
 
 Build
 ======
-
+~~~
 cmake .
 make
 make test (for testing)
-
+~~~
