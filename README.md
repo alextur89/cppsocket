@@ -17,6 +17,62 @@ Platform
     CMakeLists.txt - cmake conf file;
     README.md - this file;
 
+### Usage examples:
+* Tcp server
+~~~
+int _handler(cppsocket::tcp::TcpSocket& socket) {
+    char a = 's';
+    return static_cast<int>(socket.send(&a, 1));
+}
+
+int runServer(){
+    auto server = new cppsocket::tcp::TcpServer("127.0.0.1", 5555);
+    server->listen(1);
+    std::function< int(cppsocket::tcp::TcpSocket&) > h = _handler;
+    int res = 0;
+    server->accept(h, res);
+    return 0;
+}
+~~~
+* Tcp client
+~~~
+    cppsocket::tcp::TcpSocket socket;
+    socket.open(cppsocket::Reuseaddr, "127.0.0.1", 5555);
+    socket.connect("127.0.0.1", 5555);
+    char c = 0;
+    socket.read(&c, 1);
+~~~
+
+* Udp send
+~~~
+    cppsocket::udp::UdpSocket send_socket;
+    send_socket.open(cppsocket::Reuseaddr);
+    char data[] = {1,2,3,4,5,6,7,8};
+    auto numberof_sent_bytes = send_socket.send(data, 8, "127.0.0.1", 12345);
+~~~
+* Udp receive
+~~~
+    cppsocket::udp::UdpSocket listen_socket;
+    listen_socket.open(cppsocket::Reuseaddr | cppsocket::Bind, "127.0.0.1", 12345);
+    char buf[] = {0,0,0,0,0,0,0,0};
+    auto numberof_read_bytes = listen_socket.read(buf, 8);
+~~~
+* Udp select
+~~~
+    cppsocket::udp::UdpSocket listen_socket;
+    cppsocket::udp::UdpSelect selector;
+
+    listen_socket.open(cppsocket::Reuseaddr | cppsocket::Bind, "127.0.0.1", 12345);
+    selector.append(listen_socket);
+
+    char buf[] = {0,0,0,0,0,0,0,0};
+
+    std::list<std::shared_ptr<cppsocket::udp::UdpSocket> > vs;
+    selector.ready(vs, 0);
+    std::shared_ptr<cppsocket::udp::UdpSocket> sock = vs.front();
+    auto numberof_read_bytes = sock.read(buf, 8);
+~~~
+
 Build
 ======
 
