@@ -1,5 +1,4 @@
-CppSocket
-=============================
+# ![CppSocket logo](res/logo.png)
 
 CppSocket project provides the common socket functionality
 
