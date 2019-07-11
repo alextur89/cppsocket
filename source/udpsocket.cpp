@@ -1,13 +1,21 @@
 #include "udpsocket.h"
 
+#include <stdio.h>
+#include <unistd.h>
+#if defined(linux) || defined(__APPLE__)
 #include <netdb.h>
 #include <netinet/in.h>
-#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/time.h>
 #include <sys/un.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
 #include "exception.h"
 #include <algorithm>
 #include <memory>
@@ -39,6 +47,12 @@ bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
     if (addr.empty()){
         return false;
     }
+#if defined(WIN32) || defined(_WIN32)
+    WSADATA wsaData;
+    if(WSAStartup(MAKEWORD(2,2), &wsaData)){
+        throw ExcOpenSocket();
+    }
+#endif
     if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) == -1){
         throw ExcOpenSocket();
     }
@@ -62,8 +76,10 @@ bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
         }
     }
     if (opt & SockFlags::Nonblock){
+#if defined(linux) || defined(__APPLE__)
         int flags = fcntl(_socket, F_GETFL, 0);
         fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
+#endif
     }
     return true;
 }
@@ -85,12 +101,20 @@ unsigned UdpSocket::send(const char* src, size_t size){
 };
 
 bool UdpSocket::close(){
+#if defined(linux) || defined(__APPLE__)
     return ( (::close(_socket) == 0)? true: false);
+#else
+    bool ret = (closesocket(_socket))? false: true;
+    WSACleanup();
+    return ret;
+#endif
 };
 
 void UdpSocket::flush(){
     static char garbage_sock[512];
+#if defined(linux) || defined(__APPLE__)
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
+#endif
 };
 
 void UdpSelect::append(const UdpSocket& sock){
@@ -101,6 +125,7 @@ void UdpSelect::ready(std::list<std::shared_ptr<UdpSocket> >& result, long micro
     if (_sockets.empty()){
         throw ExcEmptySocketContainer();
     }
+#if defined(linux) || defined(__APPLE__)
     int max = (*std::max_element(std::begin(_sockets), std::end(_sockets), 
             [](std::shared_ptr<UdpSocket> sk1, std::shared_ptr<UdpSocket> sk2){
             return (sk1->getsocket() > sk2->getsocket());
@@ -109,6 +134,9 @@ void UdpSelect::ready(std::list<std::shared_ptr<UdpSocket> >& result, long micro
     if (max < 0){
         throw ExcOpenSocket();
     }
+#else
+    int max = 0;
+#endif
 
     fd_set set;
     for (auto s: _sockets){
