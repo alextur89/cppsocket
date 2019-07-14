@@ -1,5 +1,6 @@
 #include "tcpsocket.h"
 
+#if defined(linux) || defined(__APPLE__)
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -9,6 +10,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
 #include "exception.h"
 #include <algorithm>
 #include <memory>
@@ -43,6 +48,12 @@ bool TcpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
     if (addr.empty()){
         return false;
     }
+#if defined(WIN32) || defined(_WIN32)
+    WSADATA wsaData;
+    if(WSAStartup(MAKEWORD(2,2), &wsaData)){
+        throw ExcOpenSocket();
+    }
+#endif
     if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1){
         throw ExcOpenSocket();
     }
@@ -87,12 +98,20 @@ unsigned TcpSocket::send(const char* src, size_t size){
 };
 
 bool TcpSocket::close(){
+#if defined(linux) || defined(__APPLE__)
     return ( (::close(_socket) == 0)? true: false);
+#else
+    bool ret = (closesocket(_socket))? false: true;
+    WSACleanup();
+    return ret;
+#endif
 };
 
 void TcpSocket::flush(){
     static char garbage_sock[512];
+#if defined(linux) || defined(__APPLE__)
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
+#endif
 };
 
 bool TcpSocket::connect(const std::string addr, unsigned port){
