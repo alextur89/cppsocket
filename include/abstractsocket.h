@@ -10,18 +10,16 @@
 #include <string>
 
 namespace cppsocket{
-    typedef unsigned SockOpt;
     typedef int socket_t;///socket's descriptor
     typedef struct sockaddr_in addr_t;///address
     ///Socket flags for open method
-    enum SockFlags{
-        EmptyFlag = 0,///<empty
-        Reuseaddr = 0x1,///<equivalent to the SO_REUSEADDR socket option
-        Nonblock = 0x2,///<not blocking io
-        Broadcast = 0x4,///<broadcast io
-        Bind = 0x8,///<to bind interface (must be for recv socket)
-        NoDelay = 0x10///<to disable Nagle algorithm
-    };
+    using SockOpt = unsigned int;
+    static constexpr SockOpt EmptyFlagOpt = 0;///<empty
+    static constexpr SockOpt ReuseaddrOpt = 0x1;///<equivalent to the SO_REUSEADDR socket option
+    static constexpr SockOpt NonblockOpt = 0x2;///<not blocking io
+    static constexpr SockOpt BroadcastOpt = 0x4;///<broadcast io
+    static constexpr SockOpt BindOpt = 0x8;///<to bind interface (must be for recv socket)
+    static constexpr SockOpt NoDelayOpt = 0x10;///<to disable Nagle algorithm
     /*!
     *    \class AbstractSocket
     *    \brief Basic interface for socket
@@ -31,6 +29,8 @@ namespace cppsocket{
     */
     class AbstractSocket{
         protected:
+            socket_t _socket;
+            addr_t _addr;        
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer
@@ -70,5 +70,22 @@ namespace cppsocket{
             *    Flush buffered socket data
             */
             virtual void flush() = 0;   
+            /*!
+            *    Bind socket
+            *    \param[in] addr Host address
+            *    \param[in] port Port
+            */
+            bool bind(const std::string addr, unsigned port){
+                if (addr.empty()){
+                    return false;
+                }
+                _addr.sin_family = AF_INET;
+                _addr.sin_addr.s_addr = inet_addr(addr.c_str());
+                _addr.sin_port = htons(port);
+                if (::bind(_socket, (struct sockaddr*) &_addr, sizeof(struct sockaddr_in)) == -1){
+                    return false;
+                }
+                return true;
+            }
     };
 };

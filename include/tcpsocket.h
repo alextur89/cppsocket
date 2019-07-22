@@ -22,16 +22,15 @@ namespace tcp{
     */
     class TcpSocket: public AbstractSocket{
             friend class TcpServer;
-            socket_t _socket;        
-            addr_t _addr;        
             addr_t _server_addr;        
             bool _is_connected;
-            unsigned send(const char* src, size_t size, std::string addr, unsigned port){ return 0;}
+            unsigned send(const char* src, size_t size, std::string addr, unsigned port) override{ return 0;}
             TcpSocket(socket_t s, addr_t a, addr_t sa, bool is_connected = true):
-                _socket(s),
-                _addr(a),
                 _server_addr(sa),
-                _is_connected(is_connected){}
+                _is_connected(is_connected){
+                    _socket = s;
+                    _addr = a;
+                }
         public:
             TcpSocket();
             TcpSocket(const TcpSocket&);
@@ -43,7 +42,7 @@ namespace tcp{
             *    \param[in] port Port
             *    \return true if successfull, false otherwise  
             */
-            bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlagOpt, const std::string addr = "127.0.0.1", unsigned port = 0)override;
             /*!
             *    Connect to host 
             *    \param[in] addr Host address

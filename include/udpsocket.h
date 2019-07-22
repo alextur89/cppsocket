@@ -20,8 +20,6 @@ namespace udp{
     *    \date Febrary 2019 года
     */
     class UdpSocket: public AbstractSocket{
-            socket_t _socket;        
-            addr_t _addr;        
         public:
             UdpSocket();
             UdpSocket(const UdpSocket&);
@@ -32,7 +30,7 @@ namespace udp{
             *    \param[in] addr Host address
             *    \param[in] port Port
             */
-            bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlagOpt, const std::string addr = "127.0.0.1", unsigned port = 0)override;
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer
