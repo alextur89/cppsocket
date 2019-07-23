@@ -18,15 +18,17 @@ protected:
 };
 
 TEST_F(TestUdpSocket, OpenListenSocket) {
-    ASSERT_EQ(listen_socket.open(cppsocket::ReuseaddrOpt | cppsocket::BindOpt, "127.0.0.1", 12345), true);
+    ASSERT_EQ(listen_socket.open(cppsocket::ReuseaddrOpt), true);
+    ASSERT_EQ(listen_socket.bind("127.0.0.1", 12345), true);
 }
 
 TEST_F(TestUdpSocket, OpenSendSocket) {
-    ASSERT_EQ(send_socket.open(cppsocket::ReuseaddrOpt, "127.0.0.1", 12345), true);
+    ASSERT_EQ(send_socket.open(cppsocket::ReuseaddrOpt), true);
 }
 
 TEST_F(TestUdpSocket, PureExchange) {
-    listen_socket.open(cppsocket::ReuseaddrOpt | cppsocket::BindOpt, "127.0.0.1", 12345);
+    listen_socket.open(cppsocket::ReuseaddrOpt);
+    ASSERT_EQ(listen_socket.bind("127.0.0.1", 12345), true);
     send_socket.open(cppsocket::ReuseaddrOpt);
     
     char data[] = {1,2,3,4,5,6,7,8};
@@ -37,7 +39,8 @@ TEST_F(TestUdpSocket, PureExchange) {
 }
 
 TEST_F(TestUdpSocket, SelectExchange) {
-    listen_socket.open(cppsocket::ReuseaddrOpt | cppsocket::BindOpt, "127.0.0.1", 12345);
+    listen_socket.open(cppsocket::ReuseaddrOpt);
+    ASSERT_EQ(listen_socket.bind("127.0.0.1", 12345), true);
     send_socket.open(cppsocket::ReuseaddrOpt);
     selector.append(listen_socket);
 
@@ -54,7 +57,8 @@ TEST_F(TestUdpSocket, SelectExchange) {
 }
 
 TEST_F(TestUdpSocket, SelectFailExchange) {
-    listen_socket.open(cppsocket::ReuseaddrOpt | cppsocket::BindOpt, "127.0.0.1", 12345);
+    listen_socket.open(cppsocket::ReuseaddrOpt);
+    ASSERT_EQ(listen_socket.bind("127.0.0.1", 12345), true);
     send_socket.open(cppsocket::ReuseaddrOpt);
     selector.append(listen_socket);
 

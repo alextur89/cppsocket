@@ -1,6 +1,6 @@
 #include "tcpsocket.h"
 
-#if defined(linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -43,58 +43,44 @@ socket_t TcpSocket::getsocket() const{
     return _socket;
 }
 
-bool TcpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
+bool TcpSocket::open(const SockOpt opt){
     const int opt_val = 1;
-    if (addr.empty()){
-        return false;
-    }
 #if defined(WIN32) || defined(_WIN32)
     WSADATA wsaData;
     if(WSAStartup(MAKEWORD(2,2), &wsaData)){
-        throw ExcOpenSocket();
+        return false;
     }
 #endif
     if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1){
-        throw ExcOpenSocket();
+        return false;
     }
     if (opt & ReuseaddrOpt){
         if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(opt_val)) != 0){
-            throw ExcSetSockOpt();
+            return false;
         }
     } 
-    if (opt & BindOpt){
-        if (!AbstractSocket::bind(addr, port)){
-            throw ExcBind();
-        }
-    }
     if (opt & NonblockOpt){
         int flags = fcntl(_socket, F_GETFL, 0);
         fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
     }
     if (opt & NoDelayOpt){
         if (setsockopt(_socket, SOL_SOCKET, TCP_NODELAY, &opt_val, sizeof(opt_val)) != 0){
-            throw ExcSetSockOpt();
+            return false;
         }
     }
     return true;
 }
 
-unsigned TcpSocket::read(char* dest, size_t size){
-    if (!_is_connected){
-        throw ExcNotConnected();
-    }
+ssize_t TcpSocket::read(char* dest, size_t size){
     return ::read(_socket, dest, size);
 };
 
-unsigned TcpSocket::send(const char* src, size_t size){
-    if (!_is_connected){
-        throw ExcNotConnected();
-    }
+ssize_t TcpSocket::send(const char* src, size_t size){
     return ::write(_socket, src, size);
 };
 
 bool TcpSocket::close(){
-#if defined(linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
     return ( (::close(_socket) == 0)? true: false);
 #else
     bool ret = (closesocket(_socket))? false: true;
@@ -105,7 +91,7 @@ bool TcpSocket::close(){
 
 void TcpSocket::flush(){
     static char garbage_sock[512];
-#if defined(linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
     while (recv(_socket, (void*)garbage_sock, sizeof(garbage_sock), MSG_DONTWAIT) > 0);
 #endif
 };
@@ -124,8 +110,11 @@ bool TcpSocket::connect(const std::string addr, unsigned port){
 };
 
 TcpServer::TcpServer(const std::string hostAddr, unsigned hostPort){
-    if (!parentSocket.open(BindOpt | ReuseaddrOpt, hostAddr,  hostPort)){
+    if (!parentSocket.open(ReuseaddrOpt)){
         throw ExcOpenSocket();
+    }
+    if (parentSocket.bind(hostAddr, hostPort) == false){
+        throw ExcBind();
     }
 }
 

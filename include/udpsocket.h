@@ -27,24 +27,22 @@ namespace udp{
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
-            *    \param[in] addr Host address
-            *    \param[in] port Port
             */
-            bool open(const SockOpt = EmptyFlagOpt, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlagOpt)override;
             /*!
             *    Read from socket
             *    \param[out] dest Pointer to destination buffer
             *    \param[in] size Function shall attempt read size bytes from socket
             *    \return Upon successful completion the function shall return number of bytes read
             */
-            unsigned read(char* dest, size_t size)override;
+            ssize_t read(char* dest, size_t size)override;
             /*!
             *    Send to socket
             *    \param[in] src Pointer to source buffer (data)
             *    \param[in] size Function shall send size bytes to socket
             *    \return Upon successful completion the function shall return number of bytes sent
             */
-            unsigned send(const char* src, size_t size)override;
+            ssize_t send(const char* src, size_t size)override;
             /*!
             *    Send to socket
             *    \param[in] src Pointer to source buffer (data)
@@ -53,7 +51,7 @@ namespace udp{
             *    \param[in] port Port
             *    \return Upon successful completion the function shall return number of bytes sent
             */
-            unsigned send(const char* src, size_t size, std::string addr, unsigned port)override;
+            ssize_t send(const char* src, size_t size, std::string addr, unsigned port)override;
             /*!
             *    Close socket
             *    \return Upon successful completion the function shall return true else false

@@ -24,7 +24,7 @@ namespace tcp{
             friend class TcpServer;
             addr_t _server_addr;        
             bool _is_connected;
-            unsigned send(const char* src, size_t size, std::string addr, unsigned port)override{ return 0;}
+            ssize_t send(const char* src, size_t size, std::string addr, unsigned port) override{ return 0;}
             TcpSocket(socket_t s, addr_t a, addr_t sa, bool is_connected = true):
                 _server_addr(sa),
                 _is_connected(is_connected){
@@ -38,11 +38,9 @@ namespace tcp{
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
-            *    \param[in] addr Host address
-            *    \param[in] port Port
             *    \return true if successfull, false otherwise  
             */
-            bool open(const SockOpt = EmptyFlagOpt, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlagOpt)override;
             /*!
             *    Connect to host 
             *    \param[in] addr Host address
@@ -56,14 +54,14 @@ namespace tcp{
             *    \param[in] size Function shall attempt read size bytes from socket
             *    \return Upon successful completion the function shall return number of bytes read
             */
-            unsigned read(char* dest, size_t size)override;
+            ssize_t read(char* dest, size_t size)override;
             /*!
             *    Send to socket
             *    \param[in] src Pointer to source buffer (data)
             *    \param[in] size Function shall send size bytes to socket
             *    \return Upon successful completion the function shall return number of bytes sent
             */
-            unsigned send(const char* src, size_t size)override;
+            ssize_t send(const char* src, size_t size)override;
             /*!
             *    Close socket
             *    \return true if successfull, false otherwise  

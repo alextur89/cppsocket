@@ -26,16 +26,16 @@ namespace cppsocket{
             };
     };
     /*!
-    *    \class ExcSetSockOpt
-    *    \brief Exception throw when socket option cant be set
+    *    \class ExcOpenSocket
+    *    \brief Exception throw when socket not open
     *    \author Tyuryuchkin A.
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcSetSockOpt: public SocketException{
+    class ExcOpenSocket: public SocketException{
         public:
-            ExcSetSockOpt(){
-                msg = "Option not set";
+            ExcOpenSocket(){
+                msg = "Socket not open";
             }
     };
     /*!
@@ -52,7 +52,7 @@ namespace cppsocket{
             }
     };
     /*!
-    *    \class ExcSetSockOpt
+    *    \class ExcEmptySocketContainer
     *    \brief Exception throw when client wait sync from empty socket set
     *    \author Tyuryuchkin A.
     *    \version 0.0.1
@@ -65,16 +65,16 @@ namespace cppsocket{
             }
     };
     /*!
-    *    \class ExcOpenSocket
-    *    \brief Exception throw when socket cant open
+    *    \class ExcBadDescriptor
+    *    \brief Exception throw when socket's descriptor < 0
     *    \author Tyuryuchkin A.
     *    \version 0.0.1
     *    \date Febrary 2019 года
     */
-    class ExcOpenSocket: public SocketException{
+    class ExcBadDescriptor: public SocketException{
         public:
-            ExcOpenSocket(){
-                msg = "Socket not open";
+            ExcBadDescriptor(){
+                msg = "Bad sockets descriptor";
             }
     };
     /*!
