@@ -24,7 +24,7 @@ namespace tcp{
             friend class TcpServer;
             addr_t _server_addr;        
             bool _is_connected;
-            unsigned send(const char* src, size_t size, std::string addr, unsigned port) override{ return 0;}
+            unsigned send(const char* src, size_t size, std::string addr, unsigned port)override{ return 0;}
             TcpSocket(socket_t s, addr_t a, addr_t sa, bool is_connected = true):
                 _server_addr(sa),
                 _is_connected(is_connected){

@@ -6,12 +6,26 @@
  *
  */
 
+#if defined(linux) || defined(__APPLE__)
+#include <arpa/inet.h>
+#else
+#include <winsock2.h>
+#endif
+
 #include <arpa/inet.h>
 #include <string>
 
 namespace cppsocket{
+    typedef unsigned SockOpt;
+#if defined(linux) || defined(__APPLE__)
     typedef int socket_t;///socket's descriptor
     typedef struct sockaddr_in addr_t;///address
+    typedef struct sockaddr saddr_t;///address
+#else
+    typedef SOCKET socket_t;///socket's descriptor
+    typedef SOCKADDR_IN addr_t;///address
+    typedef SOCKADDR saddr_t;///address
+#endif
     ///Socket flags for open method
     using SockOpt = unsigned int;
     static constexpr SockOpt EmptyFlagOpt = 0;///<empty
