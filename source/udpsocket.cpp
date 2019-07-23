@@ -44,8 +44,6 @@ socket_t UdpSocket::getsocket() const{
 
 bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
     const int opt_val = 1;
-<<<<<<< HEAD
-=======
     if (addr.empty()){
         return false;
     }
@@ -55,7 +53,6 @@ bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
         throw ExcOpenSocket();
     }
 #endif
->>>>>>> windows_support
     if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) == -1){
         throw ExcOpenSocket();
     }
@@ -75,12 +72,8 @@ bool UdpSocket::open(const SockOpt opt, const std::string addr, unsigned port){
             throw ExcBind();
         }
     }
-<<<<<<< HEAD
     if (opt & NonblockOpt){
-=======
-    if (opt & SockFlags::Nonblock){
 #if defined(linux) || defined(__APPLE__)
->>>>>>> windows_support
         int flags = fcntl(_socket, F_GETFL, 0);
         fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
 #endif
