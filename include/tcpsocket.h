@@ -17,8 +17,8 @@ namespace tcp{
     *    \class TcpSocket
     *    \brief The TcpSocket class which implement a tcp client
     *    \author Tyuryuchkin A.
-    *    \version 0.2.0
-    *    \date April 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class TcpSocket: public AbstractSocket{
             friend class TcpServer;
@@ -81,8 +81,8 @@ namespace tcp{
     *    \class TcpServer
     *    \brief The TcpServer class which implement a tcp server
     *    \author Tyuryuchkin A.
-    *    \version 0.2.0
-    *    \date April 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class TcpServer{
             TcpSocket parentSocket;

@@ -14,8 +14,8 @@ namespace cppsocket{
     *    \class UdpSocketException
     *    \brief Basic exception class
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class SocketException: public std::exception{
         protected:
@@ -29,8 +29,8 @@ namespace cppsocket{
     *    \class ExcOpenSocket
     *    \brief Exception throw when socket not open
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class ExcOpenSocket: public SocketException{
         public:
@@ -42,8 +42,8 @@ namespace cppsocket{
     *    \class ExcBind
     *    \brief Exception throw when socket cant bind to interface
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class ExcBind: public SocketException{
         public:
@@ -55,8 +55,8 @@ namespace cppsocket{
     *    \class ExcEmptySocketContainer
     *    \brief Exception throw when client wait sync from empty socket set
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class ExcEmptySocketContainer: public SocketException{
         public:
@@ -68,8 +68,8 @@ namespace cppsocket{
     *    \class ExcBadDescriptor
     *    \brief Exception throw when socket's descriptor < 0
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class ExcBadDescriptor: public SocketException{
         public:
@@ -81,8 +81,8 @@ namespace cppsocket{
     *    \class ExcNotConnected
     *    \brief Exception throw when the programm attempt to transfer data, but the socket not connected 
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date April 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class ExcNotConnected: public SocketException{
         public:

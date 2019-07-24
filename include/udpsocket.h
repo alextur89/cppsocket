@@ -16,8 +16,8 @@ namespace udp{
     *    \class UdpSocket
     *    \brief The UdpSocket class which implement interface of AbstractSocket
     *    \author Tyuryuchkin A.
-    *    \version 0.2.0
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class UdpSocket: public AbstractSocket{
         public:
@@ -71,8 +71,8 @@ namespace udp{
     *     \class UdpSelect
     *     \brief The UdpSelect class which implement synchronous input multiplexing
     *     \author Tyuryuchkin A.
-    *     \version 0.2.0
-    *     \date Febrary 2019 года
+    *     \version 0.3.0
+    *     \date July 2019 года
     */
     class UdpSelect{
         private:

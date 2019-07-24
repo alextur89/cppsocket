@@ -36,8 +36,8 @@ namespace cppsocket{
     *    \class AbstractSocket
     *    \brief Basic interface for socket
     *    \author Tyuryuchkin A.
-    *    \version 0.0.1
-    *    \date Febrary 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class AbstractSocket{
         protected:
