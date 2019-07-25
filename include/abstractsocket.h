@@ -108,6 +108,14 @@ namespace cppsocket{
                 return setsockopt(_socket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&size), sizeof(size)) == 0? true: false;
             }
             /*!
+            *    Set send buffer size
+            *    \param[in] size Size
+            *    \return Upon successful completion the function shall return true else false
+            */
+            bool setSizeSendBuffer(unsigned size){
+                return setsockopt(_socket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&size), sizeof(size)) == 0? true: false;
+            }
+            /*!
             *    Set device to bind
             *    \param[in] dev Device name
             *    \return Upon successful completion the function shall return true else false
