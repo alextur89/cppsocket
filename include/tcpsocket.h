@@ -17,21 +17,20 @@ namespace tcp{
     *    \class TcpSocket
     *    \brief The TcpSocket class which implement a tcp client
     *    \author Tyuryuchkin A.
-    *    \version 0.2.0
-    *    \date April 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class TcpSocket: public AbstractSocket{
             friend class TcpServer;
-            socket_t _socket;        
-            addr_t _addr;        
             addr_t _server_addr;        
             bool _is_connected;
-            unsigned send(const char* src, size_t size, std::string addr, unsigned port){ return 0;}
+            ssize_t send(const char* src, size_t size, std::string addr, unsigned port) override{ return 0;}
             TcpSocket(socket_t s, addr_t a, addr_t sa, bool is_connected = true):
-                _socket(s),
-                _addr(a),
                 _server_addr(sa),
-                _is_connected(is_connected){}
+                _is_connected(is_connected){
+                    _socket = s;
+                    _addr = a;
+                }
         public:
             TcpSocket();
             TcpSocket(const TcpSocket&);
@@ -39,11 +38,9 @@ namespace tcp{
             /*!
             *    Open socket
             *    \param[in] sockOpt Options
-            *    \param[in] addr Host address
-            *    \param[in] port Port
             *    \return true if successfull, false otherwise  
             */
-            bool open(const SockOpt = EmptyFlag, const std::string addr = "127.0.0.1", unsigned port = 0)override;
+            bool open(const SockOpt = EmptyFlagOpt)override;
             /*!
             *    Connect to host 
             *    \param[in] addr Host address
@@ -57,14 +54,14 @@ namespace tcp{
             *    \param[in] size Function shall attempt read size bytes from socket
             *    \return Upon successful completion the function shall return number of bytes read
             */
-            unsigned read(char* dest, size_t size)override;
+            ssize_t read(char* dest, size_t size)override;
             /*!
             *    Send to socket
             *    \param[in] src Pointer to source buffer (data)
             *    \param[in] size Function shall send size bytes to socket
             *    \return Upon successful completion the function shall return number of bytes sent
             */
-            unsigned send(const char* src, size_t size)override;
+            ssize_t send(const char* src, size_t size)override;
             /*!
             *    Close socket
             *    \return true if successfull, false otherwise  
@@ -84,8 +81,8 @@ namespace tcp{
     *    \class TcpServer
     *    \brief The TcpServer class which implement a tcp server
     *    \author Tyuryuchkin A.
-    *    \version 0.2.0
-    *    \date April 2019 года
+    *    \version 0.3.0
+    *    \date July 2019 года
     */
     class TcpServer{
             TcpSocket parentSocket;
