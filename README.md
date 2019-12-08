@@ -37,7 +37,7 @@ int runServer(){
 * Tcp client
 ~~~
     cppsocket::tcp::TcpSocket socket;
-    socket.open(cppsocket::Reuseaddr, "127.0.0.1", 5555);
+    socket.open(cppsocket::ReuseaddrOpt);
     socket.connect("127.0.0.1", 5555);
     char c = 0;
     socket.read(&c, 1);
@@ -46,14 +46,15 @@ int runServer(){
 * Udp send
 ~~~
     cppsocket::udp::UdpSocket send_socket;
-    send_socket.open(cppsocket::Reuseaddr);
+    send_socket.open(cppsocket::ReuseaddrOpt);
     char data[] = {1,2,3,4,5,6,7,8};
     auto numberof_sent_bytes = send_socket.send(data, 8, "127.0.0.1", 12345);
 ~~~
 * Udp receive
 ~~~
     cppsocket::udp::UdpSocket listen_socket;
-    listen_socket.open(cppsocket::Reuseaddr | cppsocket::Bind, "127.0.0.1", 12345);
+    listen_socket.open(cppsocket::ReuseaddrOpt);
+    listen_socket.bind("127.0.0.1", 12345);
     char buf[] = {0,0,0,0,0,0,0,0};
     auto numberof_read_bytes = listen_socket.read(buf, 8);
 ~~~
@@ -62,7 +63,8 @@ int runServer(){
     cppsocket::udp::UdpSocket listen_socket;
     cppsocket::udp::UdpSelect selector;
 
-    listen_socket.open(cppsocket::Reuseaddr | cppsocket::Bind, "127.0.0.1", 12345);
+    listen_socket.open(cppsocket::ReuseaddrOpt);
+    listen_socket.bind("127.0.0.1", 12345);
     selector.append(listen_socket);
 
     char buf[] = {0,0,0,0,0,0,0,0};
